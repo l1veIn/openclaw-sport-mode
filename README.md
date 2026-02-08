@@ -47,6 +47,30 @@ This will:
 1. Reset heartbeat to **30m** (default).
 2. Clear `HEARTBEAT.md`.
 
+## 🌟 Real World Examples
+
+### 1. Supervising Coding Agents (The "Synnia" Case)
+We used Sport Mode to build a Rust project (`synnia-core`) with **Codex** through 5 milestones (M1-M5).
+Instead of manually checking progress, we set the agent on auto-pilot:
+
+```bash
+sport-mode on --task "Monitor Codex in tmux. If current milestone passes tests, auto-start the next one. If stuck, notify me."
+```
+**Result:** The agent autonomously verified M1, committed code, started M2, and continued the chain—all while we grabbed a coffee. ☕
+
+### 2. Interactive Games
+Turn your agent into a game master.
+
+#### Word Chain (English)
+```bash
+sport-mode on --every "1m" --task "Play Word Chain. Start with 'Apple'. Reply with a word starting with the last letter. 10 rounds."
+```
+
+#### 成语接龙 (Chinese Idiom Solitaire)
+```bash
+sport-mode on --every "1m" --task "成语接龙：每分钟回复一个成语，接上一个成语的尾字。5轮后自动结束。"
+```
+
 ## 🧠 Best Practices
 
 ### The "Auto-Pilot" Pattern
