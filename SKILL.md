@@ -7,7 +7,7 @@ metadata:
   }
 ---
 
-# Sport Mode (运动模式)
+# Sport Mode
 
 Temporarily boost heartbeat frequency (default 3m) and inject a monitoring task into `HEARTBEAT.md`.
 Perfect for supervising background agents (Codex), long-running builds, or interactive games.
@@ -34,24 +34,24 @@ sport-mode off
     - Patches config back to `30m` (default).
     - Clears `HEARTBEAT.md`.
 
-## Best Practices (最佳实践)
+## Best Practices
 
-### 1. Set a Finish Line (设定终点线)
+### 1. Set a Finish Line
 Unless you want an endless marathon, always define a **termination condition** in your task.
 - ✅ Good: "Monitor build. **If success or fail, run sport-mode off**."
 - ❌ Bad: "Monitor build." (Agent might keep reporting "Done" forever until you manually stop it).
 
-### 2. State Machine in File (文件状态机)
+### 2. State Machine in File
 For multi-step tasks (like games or staged deployments), let the agent **update HEARTBEAT.md** itself.
 - Pattern: Read state -> Execute step -> Write new state -> Sleep.
 - This keeps the agent "stateless" (doesn't rely on conversation history context window) but the task "stateful".
 
-### 3. Use tmux for Visibility (搭配 tmux)
+### 3. Use tmux for Visibility
 If the monitoring task involves terminal output (e.g., Codex coding, compiling), running the task in a **tmux session** is ideal.
 - The agent can inspect the pane (`tmux capture-pane`) without interfering.
 - The user can attach (`tmux attach`) to watch live.
 
-### 4. Silence is Golden (保持安静)
+### 4. Silence is Golden
 For high-frequency modes (e.g., 1m), avoid spamming "Nothing happened".
 - Configure the agent to reply `HEARTBEAT_OK` (silence) if the status hasn't changed.
 - Only notify the user on **milestone completion**, **errors**, or **final success**.
