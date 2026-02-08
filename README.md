@@ -21,7 +21,16 @@ By default, OpenClaw checks in every 30 minutes. That's great for battery life, 
 git clone https://github.com/l1veIn/openclaw-sport-mode.git ~/.openclaw/skills/sport-mode
 ```
 
-## 🎮 Usage
+## 🗣️ Conversational Usage (Recommended)
+
+Just ask your agent!
+
+> **You:** "I'm running a long compile task. Can you watch it for me?"
+> **Agent:** "Sure."
+> **You:** "Start **Sport Mode** with a 1-minute interval. If it fails, ping me."
+> **Agent:** (Executes `sport-mode on` automatically) "🏎️ Sport Mode activated!"
+
+## 💻 CLI Usage
 
 ### 1. Shift into Sport Mode (On)
 
