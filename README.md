@@ -70,6 +70,34 @@ sport-mode on --every "1m" --task "Play Word Chain. Start with 'Apple'. Reply wi
 ```bash
 sport-mode on --every "1m" --task "成语接龙：每分钟回复一个成语，接上一个成语的尾字。5轮后自动结束。"
 ```
+### 3. The Self-Destruct Protocol (自毁机制)
+How to ensure the high-frequency heartbeat stops automatically? Write the shutdown command *into* the task instructions.
+
+**Initial `HEARTBEAT.md`:**
+```markdown
+# 🏎️ Sport Mode Active
+Target: 1m
+
+## Task
+Count down from 5.
+State: 5
+
+## Instructions
+1. Decrement state.
+2. If State > 0, update this file.
+3. If State == 0, run: `sport-mode off` (Self-Destruct).
+```
+
+**Agent Action (Round 1):**
+- Reads file.
+- Sends "Count: 4".
+- **Updates file** to `State: 4`.
+
+**Agent Action (Round 5):**
+- Reads `State: 1`.
+- Decrements to 0.
+- Executes `sport-mode off`.
+- **Result:** Heartbeat resets to 30m, file is cleared. Mission complete.
 
 ## 🧠 Best Practices
 
