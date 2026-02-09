@@ -63,5 +63,24 @@ Unless you want an endless marathon, always define a **termination condition**.
 *   ✅ "If success or fail, run sport-mode off."
 *   ❌ "Monitor build."
 
+## Template: HEARTBEAT.md
+
+When activating sport mode, write `HEARTBEAT.md` using this structure:
+
+```markdown
+# 🏎️ Sport Mode Active
+Target: 1m
+
+## Task
+Count down from 5.
+State: 5
+
+## Instructions
+1. Decrement state (5 -> 4).
+2. If State > 0, update this file with new state.
+3. If State == 0, run: `sport-mode off`.
+4. If State == 0, notify user: "Countdown finished!"
+```
+
 ## Implementation Note
 This skill uses `openclaw config set` to safely patch configuration at runtime, triggering a seamless Gateway reload.
