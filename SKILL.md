@@ -34,27 +34,34 @@ sport-mode off
     - Patches config back to `30m` (default).
     - Clears `HEARTBEAT.md`.
 
-## Best Practices
+## Best Practices (Critical)
 
-### 1. Set a Finish Line
-Unless you want an endless marathon, always define a **termination condition** in your task.
-- ✅ Good: "Monitor build. **If success or fail, run sport-mode off**."
-- ❌ Bad: "Monitor build." (Agent might keep reporting "Done" forever until you manually stop it).
+### 1. State Machine Pattern (Stateful File, Stateless Agent)
+**Treat `HEARTBEAT.md` as a dynamic progress bar, not a static sticky note.**
+Since you lose chat context between heartbeats, you MUST write your current state and next step into the file.
 
-### 2. State Machine in File
-For multi-step tasks (like games or staged deployments), let the agent **update HEARTBEAT.md** itself.
-- Pattern: Read state -> Execute step -> Write new state -> Sleep.
-- This keeps the agent "stateless" (doesn't rely on conversation history context window) but the task "stateful".
+*   **Bad**: "Monitor M1-M4." (Agent forgets which milestone it's on)
+*   **Good**: "Current: M1. If done, update this file to 'Current: M2'."
+
+### 2. The "Liveness Report" Rule
+**Prevent silent death.** Long-running tasks can look like they're working when they're actually stuck.
+To avoid checking in forever with `HEARTBEAT_OK`:
+*   **Rule**: If you have sent `HEARTBEAT_OK` for **approx. 30 minutes** (e.g., 30 times @ 1m, or 6 times @ 5m), you MUST break silence and send a status update.
+*   **Format**: "Still running [task]... Last log: [snippet]"
+*   This reassures the user that the process hasn't hung.
 
 ### 3. Use tmux for Visibility
 If the monitoring task involves terminal output (e.g., Codex coding, compiling), running the task in a **tmux session** is ideal.
-- The agent can inspect the pane (`tmux capture-pane`) without interfering.
-- The user can attach (`tmux attach`) to watch live.
+*   The agent can inspect the pane (`tmux capture-pane`) without interfering.
+*   The user can attach (`tmux attach`) to watch live.
+*   **Tip**: Append `; echo Done; read` to your command. This keeps the tmux window open if the process crashes or exits, allowing you to inspect logs.
+    *   ✅ `tmux new-session -d -s task "codex ...; echo Done; read"`
+    *   ❌ `tmux new-session -d -s task "codex ..."` (Window closes on exit)
 
-### 4. Silence is Golden
-For high-frequency modes (e.g., 1m), avoid spamming "Nothing happened".
-- Configure the agent to reply `HEARTBEAT_OK` (silence) if the status hasn't changed.
-- Only notify the user on **milestone completion**, **errors**, or **final success**.
+### 4. Set a Finish Line
+Unless you want an endless marathon, always define a **termination condition**.
+*   ✅ "If success or fail, run sport-mode off."
+*   ❌ "Monitor build."
 
 ## Implementation Note
 This skill uses `openclaw config set` to safely patch configuration at runtime, triggering a seamless Gateway reload.
